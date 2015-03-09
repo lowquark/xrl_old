@@ -12,8 +12,8 @@ test_xrl: test_xrl.o libxrl.a
 	$(CC) -g -o $@ $^ -L. -std=c99 -Wall -lSDL2 -lGL -lGLEW -lpng
 	$(STRIP) -s $@
 
-test_xrl.exe: test_xrl.o
-	$(CC) -g -o $@ $^ -L. -lxrl -std=c99 -Wall -lmingw32 -lSDL2main -lSDL2.dll -mwindows -lopengl32 -lglew32 -lpng -lz
+test_xrl.exe: test_xrl.o xrl.dll
+	$(CC) -g -o $@ $^ -L. -lxrl -std=c99 -Wall -lmingw32 -lSDL2main -lSDL2.dll -mwindows -lopengl32 -lglew32 -lpng -lz -static-libgcc -Wl,-subsystem,windows
 	$(STRIP) -s $@
 
 src/tilemap_frag_asm.o: src/tilemap.frag.asm
