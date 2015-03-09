@@ -1,6 +1,10 @@
 .*.swp
 .*.swo
 *.o
-*.a
-*.so
+libxrl.a
+libxrl.so
+xrl.lib
+xrl.dll
+publish/*
 test_xrl
+test_xrl.exe

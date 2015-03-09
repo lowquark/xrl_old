@@ -2,12 +2,17 @@
 #include <xrl/xrl.h>
 
 #include <SDL2/SDL.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 
 #include "image.h"
+
+#define EXPORT __declspec(dllexport)
 
 extern const char tilemap_frag_asm[];
 
@@ -54,7 +59,7 @@ static GLuint new_texture()
 	return id;
 }
 
-bool xrl_init(size_t w, size_t h, const char * fontpath)
+EXPORT bool xrl_init(size_t w, size_t h, const char * fontpath)
 {
 	SDL_Init(SDL_INIT_VIDEO);
 
@@ -173,7 +178,7 @@ bool xrl_init(size_t w, size_t h, const char * fontpath)
 
 	return true;
 }
-void xrl_deinit()
+EXPORT void xrl_deinit()
 {
 	free(indices);
 	free(colors);
@@ -203,18 +208,18 @@ typedef struct color
 static color_t fgcolor = { 255, 255, 255 };
 static color_t bgcolor = {   0,   0,   0 };
 
-void xrl_moveto(size_t x, size_t y)
+EXPORT void xrl_moveto(size_t x, size_t y)
 {
 	cursor_x = x;
 	cursor_y = y;
 }
-void xrl_fgcolor(uint8_t r, uint8_t g, uint8_t b)
+EXPORT void xrl_fgcolor(uint8_t r, uint8_t g, uint8_t b)
 {
 	fgcolor.r = r;
 	fgcolor.g = g;
 	fgcolor.b = b;
 }
-void xrl_bgcolor(uint8_t r, uint8_t g, uint8_t b)
+EXPORT void xrl_bgcolor(uint8_t r, uint8_t g, uint8_t b)
 {
 	bgcolor.r = r;
 	bgcolor.g = g;
@@ -242,7 +247,7 @@ static void xrl_setc(uint8_t c, size_t x, size_t y)
 		bgcolors[3*(x + y*res_w) + 2] = bgcolor.b;
 	}
 }
-void xrl_putc(uint8_t c)
+EXPORT void xrl_putc(uint8_t c)
 {
 	xrl_setc(c, cursor_x, cursor_y);
 
@@ -250,7 +255,7 @@ void xrl_putc(uint8_t c)
 	if(cursor_x > res_w)
 		cursor_x = res_w;
 }
-void xrl_putstr(const char * str)
+EXPORT void xrl_putstr(const char * str)
 {
 	//printf("parsing \"%s\"\n", str);
 
@@ -337,7 +342,7 @@ void xrl_putstr(const char * str)
 	cursor_y = y;
 }
 
-void xrl_flush()
+EXPORT void xrl_flush()
 {
 	//  ----------------- Assign some uniforms in the fragment shader -----------------
 	glUseProgram(tilemap_prog);
@@ -378,7 +383,7 @@ void xrl_flush()
 
 	SDL_GL_SwapWindow(window);
 }
-void xrl_clear()
+EXPORT void xrl_clear()
 {
 	//Make sure to update the buffer
 	for(int k = 0 ; k < res_w*res_h ; k ++)
@@ -525,12 +530,12 @@ static uint8_t get_xrl_key(SDL_KeyboardEvent sdl_key)
 }
 */
 
-uint32_t xrl_ticks()
+EXPORT uint32_t xrl_ticks()
 {
 	return SDL_GetTicks();
 }
 
-bool xrl_pollevent(xrl_event_t * event)
+EXPORT bool xrl_pollevent(xrl_event_t * event)
 {
 	SDL_Event e;
 
